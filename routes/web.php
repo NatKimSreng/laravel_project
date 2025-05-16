@@ -1,36 +1,19 @@
 <?php
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
-
-$allJobs = [
-    [
-        'id' => 1,
-        'title' => 'Teacher',
-        'salary' => '$100000'
-    ],
-    [
-        'id' => 2,
-        'title' => 'Programmer',
-        'salary' => '$50000'
-    ],
-    [
-        'id' => 3,
-        'title' => 'Nurse',
-        'salary' => '$200000'
-    ]
-];
+use App\Models\Job;
 
 Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/job', function () use ($allJobs) {
-    return view('jobs', ['jobs' => $allJobs]);
+Route::get('/job', function () {
+    $jobs = Job::all();
+    return view('jobs', ['jobs' => $jobs]);
 });
 
-Route::get('/job/{id}', function ($id) use ($allJobs) {
-    $job = Arr::first($allJobs, fn($job) => $job['id'] == $id);
+Route::get('/job/{id}', function ($id) {
+    $job = Job::find($id);
     if (!$job) {
         abort(404, 'Job not found');
     }
